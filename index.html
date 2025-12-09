@@ -1,0 +1,1436 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SQL Learning Roadmap - From Zero to Hero</title>
+    <style>
+  
+      :root {
+        --bg: #030304;
+        --panel: #0b0b0d;
+        --muted: rgba(255, 255, 255, 0.4);
+        --neon-blue: #3de1ff;
+        --neon-pink: #ff54c2;
+        --neon-green: #7cff6b;
+        --neon-yellow: #ffd86b;
+        --neon-purple: #c88bff;
+        --neon-orange: #ff9a4b;
+        --transition: 200ms cubic-bezier(0.2, 0.9, 0.2, 1);
+      }
+
+      
+      html,
+      body {
+        height: 100%;
+      }
+
+      body {
+        margin: 0;
+        font-family: Inter, system-ui, Arial, sans-serif;
+        background: var(--bg);
+        color: #e9eef7;
+        padding: 28px;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      .container {
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+
+      /* Header and controls */
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 18px;
+      }
+
+      h1 {
+        font-size: 18px;
+        margin: 0;
+        color: #eaf6ff;
+        letter-spacing: 0.2px;
+      }
+      h1 a {
+        text-decoration: none;
+        color: inherit;
+      }
+
+      h1 a:hover {
+        color: var(--neon-blue); 
+      }
+      .controls {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+
+      
+      .seg {
+        display: flex;
+        background: transparent;
+        border-radius: 999px;
+        padding: 6px;
+        border: 1px solid rgba(255, 255, 255, 0.09);
+      }
+
+      .seg label {
+        cursor: pointer;
+        padding: 8px 12px;
+        border-radius: 999px;
+        font-size: 13px;
+        color: #cfeaff;
+        position: relative;
+        transition: all var(--transition);
+        user-select: none;
+      }
+
+      .seg input {
+        display: none;
+      }
+
+      
+      .seg label:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 40px rgba(61, 225, 255, 0.04);
+      }
+
+      .seg label.active {
+        color: #041217;
+        background: linear-gradient(
+          90deg,
+          rgba(255, 255, 255, 0.06),
+          rgba(255, 255, 255, 0.02)
+        );
+        box-shadow: 0 6px 34px rgba(61, 225, 255, 0.14),
+          0 0 36px rgba(255, 84, 194, 0.06) inset;
+      }
+
+     
+      .seg label[data-val="beginner"].active {
+        box-shadow: 0 8px 40px rgba(124, 255, 107, 0.16);
+        background: linear-gradient(90deg, var(--neon-green), #bff8c9);
+      }
+
+      .seg label[data-val="intermediate"].active {
+        box-shadow: 0 8px 40px rgba(61, 225, 255, 0.14);
+        background: linear-gradient(90deg, var(--neon-yellow), #ffea9b);
+        color: #00151a;
+      }
+
+      .seg label[data-val="advanced"].active {
+        box-shadow: 0 8px 40px rgba(255, 84, 194, 0.14);
+        background: linear-gradient(
+          90deg,
+          var(--neon-pink),
+          var(--neon-purple)
+        );
+        color: #1c0016;
+      }
+
+      .seg label[data-val="zero"].active {
+        color: #000;
+        background: linear-gradient(90deg, #f2f2f2, #c7c7c7);
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.4),
+          0 0 20px rgba(255, 255, 255, 0.2), 0 0 30px rgba(61, 225, 255, 0.15),
+          0 0 40px rgba(255, 84, 194, 0.15);
+        font-weight: bold;
+      }
+
+      
+      .seg label[data-val="beginner"]:not(.active):hover {
+        box-shadow: 0 10px 36px rgba(124, 255, 107, 0.06);
+      }
+
+      .seg label[data-val="intermediate"]:not(.active):hover {
+        box-shadow: 0 10px 36px rgba(61, 225, 255, 0.06);
+      }
+
+      .seg label[data-val="advanced"]:not(.active):hover {
+        box-shadow: 0 10px 36px rgba(255, 84, 194, 0.06);
+      }
+
+      
+      .neon-checkbox {
+        appearance: none;
+        width: 18px;
+        height: 18px;
+        border: 2px solid var(--neon-blue);
+        border-radius: 4px;
+        background: transparent;
+        position: relative;
+        cursor: pointer;
+        transition: box-shadow 0.2s ease, background 0.2s ease,
+          border-color 0.2s ease;
+        border-color: var(--muted);
+      }
+
+      .neon-checkbox:hover {
+        border-color: var(--neon-blue);
+        box-shadow: 0 0 6px var(--neon-blue);
+      }
+
+      .neon-checkbox:checked {
+        background: var(--neon-blue);
+        border-color: var(--neon-blue);
+        box-shadow: 0 0 12px var(--neon-blue), 0 0 24px var(--neon-blue);
+      }
+
+      .neon-checkbox:checked::after {
+        content: "";
+        position: absolute;
+        top: 2px;
+        left: 6px;
+        width: 4px;
+        height: 9px;
+        border: solid #000;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+      }
+      .filter-row label:hover span {
+        color: #cfeaff;
+      }
+
+      .neon-checkbox:checked + span {
+        color: #cfeaff;
+      }
+
+      .filter-row label span {
+        transition: color 0.2s ease;
+      }
+      
+      .btn {
+        background: linear-gradient(
+          90deg,
+          rgba(255, 255, 255, 0.02),
+          rgba(255, 255, 255, 0.01)
+        );
+        border: none;
+        padding: 8px 12px;
+        border-radius: 8px;
+        color: var(--muted);
+        cursor: pointer;
+        transition: all var(--transition);
+      }
+
+      .btn.ghost {
+        background: transparent;
+      }
+
+      
+      #toggleAll:hover {
+        border-color: var(--neon-blue);
+        box-shadow: 0 0 12px var(--neon-blue), 0 0 24px var(--neon-blue);
+        color: #cfeaff;
+        transform: none;
+      }
+
+      #toggleAll:active {
+        transform: none;
+        box-shadow: 0 0 12px var(--neon-blue), 0 0 24px var(--neon-blue);
+      }
+
+      .controls .options {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        margin-left: 6px;
+      }
+
+      .filter-row {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      
+      .roadmap {
+        margin-top: 18px;
+      }
+
+      .chapter {
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.02),
+          rgba(255, 255, 255, 0.01)
+        );
+        border: 1px solid rgba(255, 255, 255, 0.04);
+        margin-bottom: 12px;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 6px 30px rgba(0, 0, 0, 0.6);
+      }
+
+      .chapter-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 16px;
+        cursor: pointer;
+        background: linear-gradient(
+          90deg,
+          rgba(255, 255, 255, 0.01),
+          rgba(255, 255, 255, 0.01)
+        );
+        border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+        transition: background var(--transition);
+      }
+
+      .chapter-header:hover {
+        filter: brightness(1.06);
+      }
+
+      .icon {
+        width: 44px;
+        height: 44px;
+        flex: 0 0 44px;
+        border-radius: 9px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.02),
+          rgba(255, 255, 255, 0.01)
+        );
+        box-shadow: 0 0 18px rgba(0, 0, 0, 0.6),
+          0 0 24px rgba(0, 0, 0, 0.4) inset;
+        transition: transform var(--transition);
+      }
+
+      .chapter-header:hover .icon {
+        transform: translateY(-3px);
+      }
+
+      .chapter-title {
+        font-weight: 700;
+        font-size: 14px;
+        color: #eaf6ff;
+      }
+
+      .chapter-desc {
+        font-size: 12px;
+        color: var(--muted);
+        margin-left: 8px;
+      }
+
+      .chev {
+        margin-left: auto;
+        color: var(--muted);
+        font-weight: 700;
+      }
+
+      .chapter-body {
+        padding: 12px 18px;
+        display: none;
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.01),
+          rgba(255, 255, 255, 0.005)
+        );
+        transition: all var(--transition);
+      }
+
+      
+      .topic {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 8px 6px;
+        border-radius: 8px;
+        margin-bottom: 6px;
+        transition: all var(--transition);
+        background: transparent;
+        gap: 12px;
+      }
+
+      .topic .left {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        flex: 1;
+        min-width: 0;
+      }
+
+      .topic .text {
+        font-size: 13px;
+        transition: color var(--transition);
+        display: flex;
+        align-items: center;
+        flex: 1;
+        min-width: 0;
+        gap: 8px;
+      }
+
+      .topic .text-content {
+        flex: 1;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      
+      .tag {
+        font-size: 12px;
+        padding: 6px 8px;
+        border-radius: 999px;
+        font-weight: 700;
+        box-shadow: 0 0 16px rgba(0, 0, 0, 0.6);
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all var(--transition);
+        flex-shrink: 0;
+      }
+
+      .tag.beginner {
+        background: linear-gradient(90deg, var(--neon-green), #bff8c9);
+        color: #00130a;
+        box-shadow: 0 0 22px rgba(124, 255, 107, 0.12);
+      }
+
+      .tag.intermediate {
+        background: linear-gradient(90deg, var(--neon-yellow), #ffea9b);
+        color: #1a1200;
+        box-shadow: 0 0 22px rgba(255, 216, 107, 0.12);
+      }
+
+      .tag.advanced {
+        background: linear-gradient(
+          90deg,
+          var(--neon-pink),
+          var(--neon-purple)
+        );
+        color: #120016;
+        box-shadow: 0 0 22px rgba(255, 84, 194, 0.12);
+      }
+
+      
+      .glow-blue {
+        box-shadow: 0 8px 40px rgba(61, 225, 255, 0.12),
+          0 0 40px rgba(61, 225, 255, 0.06);
+      }
+
+      .glow-pink {
+        box-shadow: 0 8px 40px rgba(255, 84, 194, 0.12),
+          0 0 48px rgba(255, 84, 194, 0.06);
+      }
+
+      .glow-green {
+        box-shadow: 0 8px 40px rgba(124, 255, 107, 0.12),
+          0 0 48px rgba(124, 255, 107, 0.06);
+      }
+
+      
+      .dim {
+        opacity: 0.22;
+        filter: grayscale(50%);
+        transform: scale(0.995);
+      }
+
+      .topic.dim:hover {
+        opacity: 1;
+        filter: none;
+        transform: scale(1.005);
+        background: rgba(255, 255, 255, 0.01);
+      }
+
+      .topic.dim:hover .text {
+        color: #f1fbff;
+      }
+
+      .topic.dim:hover .tag {
+        filter: none;
+        transform: translateX(0);
+      }
+
+      .meta {
+        font-size: 12px;
+        color: var(--muted);
+        margin-left: 6px;
+      }
+
+      footer {
+        color: var(--muted);
+        font-size: 12px;
+        margin-top: 16px;
+        text-align: center;
+        padding-bottom: 10px;
+      }
+
+      /* Resource icons styling */
+      .resource-icons {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        flex-shrink: 0;
+      }
+      
+      .resource-icon {
+        width: 16px;
+        height: 16px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 3px;
+        transition: all var(--transition);
+        cursor: pointer;
+        opacity: 0.8;
+        flex-shrink: 0;
+      }
+      
+      .resource-icon:hover {
+        opacity: 1;
+        transform: translateY(-1px);
+      }
+      
+      .yt-icon {
+        background: #ff0000;
+        box-shadow: 0 0 8px rgba(255, 0, 0, 0.4);
+      }
+      
+      .pdf-icon {
+        background: #ff3b30;
+        box-shadow: 0 0 8px rgba(255, 59, 48, 0.4);
+      }
+      
+      .code-icon {
+        background: #007aff;
+        box-shadow: 0 0 8px rgba(0, 122, 255, 0.4);
+      }
+      
+      .resource-icon svg {
+        width: 10px;
+        height: 10px;
+        fill: white;
+      }
+
+      
+   @media (max-width: 700px) {
+
+      header {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 12px;
+      }
+
+       .controls {
+      flex-direction: column;
+      align-items: stretch;
+      width: 100%;
+      gap: 12px;
+      }
+
+      .seg {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      width: 100%;
+      }
+
+      .seg label {
+       text-align: center;
+      padding: 8px 6px;
+      font-size: 13px;
+      white-space: nowrap;
+      overflow: hidden;
+      position: relative;
+      color: inherit; 
+      }
+
+      .options {
+      display: flex;
+      gap: 8px;
+      justify-content: space-between;
+      width: 100%;
+      flex-wrap: wrap;
+      }
+
+      #toggleAll {
+      min-width: 120px;
+      flex: 1 1 auto;
+      text-align: center;
+      }
+      
+      .topic {
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      
+      .tag {
+        align-self: flex-start;
+      }
+    }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <div style="display: flex; align-items: center; gap: 14px">
+          <h1>
+            <a href="PDF/Master-SQL-Fundamentals-to-Advanced.pdf" target="_blank" title="Course Introduction"> Master SQL: Fundamentals to Advanced - Roadmap </a><br />
+            <span style="font-size: 10px">By: Zherou A. Majied</span>
+          </h1>
+        </div>
+
+        <div class="controls">
+          <div
+            class="seg"
+            role="tablist"
+            aria-label="level selection"
+            id="levelButtons"
+          >
+            <label data-val="zero" class="active"
+              ><input type="radio" name="level" value="zero" checked /> Zero to
+              Hero</label
+            >
+            <label data-val="beginner"
+              ><input type="radio" name="level" value="beginner" />
+              Beginner</label
+            >
+            <label data-val="intermediate"
+              ><input type="radio" name="level" value="intermediate" />
+              Intermediate</label
+            >
+            <label data-val="advanced"
+              ><input type="radio" name="level" value="advanced" />
+              Advanced</label
+            >
+          </div>
+
+          <div class="options">
+            <button class="btn ghost" id="toggleAll">Expand All</button>
+            <div class="filter-row">
+              <label
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 8px;
+                  cursor: pointer;
+                "
+              >
+                <input
+                  id="showOnly"
+                  type="checkbox"
+                  style="transform: scale(1.05)"
+                  class="neon-checkbox"
+                />
+                <span>Essentials Only</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="roadmap" id="roadmap"></main>
+
+      <footer>
+        <div>Click a chapter header to expand or collapse. Recommended topics glow. Optional topics dim. Hover dimmed items to preview.</div>
+        <div style="margin-top: 8px;">&copy; All rights reserved to Zherou A. Majied</div>
+      </footer>
+    </div>
+
+    <script>
+      // Define all the chapters and their topics
+      const CHAPTERS = [
+        {
+          id: 1,
+          title: "Chapter 1: Foundations & Basics",
+          desc: "Intro, modeling, normalization, DDL",
+          icon: "db",
+          topics: [
+            {
+              id: 1,
+              text: "Introduction to Databases: Concepts and Types",
+              tag: "beginner",
+              pdfURL: "01-Introduction-to-Databases-Concepts-and-Types.pdf",
+              ytURL: "https://youtu.be/XXIMHm6waW0"
+            },
+            { 
+              id: 2, 
+              text: "Database Design & Modeling", 
+              tag: "beginner",
+              pdfURL: "02-Database-Design-&-Modeling.pdf",
+              ytURL: "https://youtu.be/U6hG5ta_6VA"
+            },
+            {
+              id: 3,
+              text: "Normalization and Data Integrity",
+              tag: "beginner",
+              pdfURL: "03-Normalization-and-Data-Integrity.pdf",
+              ytURL: "https://youtu.be/MnZRxDyas5Y"
+            },
+            {
+              id: 4,
+              text: "Introduction to SQL & SQL Command Types",
+              tag: "beginner",
+              pdfURL: "04-Introduction-to-SQL-&-SQL-Command-Types.pdf",
+              ytURL: "https://youtu.be/SlkOJMk5tNc"
+            },
+            {
+              id: 5,
+              text: "SQL Tools & Setup: Local and Online",
+              tag: "beginner",
+              pdfURL: "05-SQL-Tools-&-Setup-Local-and-Online.pdf",
+              ytURL: "https://youtu.be/97qXxmhWObk"
+            },
+            {
+              id: 6,
+              text: "SQL Statements & Execution Order",
+              tag: "beginner",
+              pdfURL: "06-SQL-Statements-&-Execution-Order.pdf",
+              ytURL: "https://youtu.be/5DqcAPeR9EM"
+            },
+            {
+              id: 7,
+              text: "DDL in Action: Building a Mini-ERP Database",
+              tag: "beginner",
+              codeURL: "07-DDL-in-Action-Building-a-Mini-ERP-Database.sql",
+              ytURL:"https://youtu.be/4pxyS8lsxIk"
+            },
+          ],
+        },
+        {
+          id: 2,
+          title: "Chapter 2: Core Querying Skills",
+          desc: "SELECT, WHERE, ORDER BY, GROUP BY",
+          icon: "query",
+          topics: [
+            { 
+              id: 8, 
+              text: "Using SELECT to Retrieve Data", 
+              tag: "beginner",
+              ytURL:"https://youtu.be/Snk-ROkVLFI"
+            },
+            { 
+              id: 9, 
+              text: "Using WHERE to Filter Rows", 
+              tag: "beginner",
+              ytURL:"https://youtu.be/v8QGix_b42I"
+            },
+            {
+              id: 10,
+              text: "Using ORDER BY to Sort Query Results",
+              tag: "beginner",
+              ytURL:"https://youtu.be/Wyihk418NdY"
+            },
+            {
+              id: 11,
+              text: "Using GROUP BY to Aggregate Data",
+              tag: "beginner",
+              ytURL:"https://youtu.be/35DGb9aIBMY"
+            },
+            {
+              id: 12,
+              text: "Using HAVING to Filter Aggregated Data",
+              tag: "beginner",
+              ytURL:"https://youtu.be/urNwtOEjarY"
+            },
+          ],
+        },
+        {
+          id: 3,
+          title: "Chapter 3: Intermediate SQL Concepts",
+          desc: "JOINS, subqueries, CTEs, sets",
+          icon: "join",
+          topics: [
+            {
+              id: 13,
+              text: "Using JOINS to Combine Data from Multiple Tables",
+              tag: "intermediate",
+              ytURL:"https://youtu.be/zdLhUTJJdWQ"
+            },
+            { 
+              id: 14, 
+              text: "How to Use Subqueries", 
+              tag: "intermediate",
+              ytURL:"https://youtu.be/vcgzgY_gs7w"
+            },
+            {
+              id: 15,
+              text: "Using CTEs (Common Table Expressions) and Recursive Queries",
+              tag: "intermediate",
+              ytURL:"https://youtu.be/aNRQ2EHobQU"
+            },
+            {
+              id: 16,
+              text: "Set Operations: UNION and UNION ALL",
+              tag: "intermediate",
+              ytURL:"https://youtu.be/VfjVpzmO86I"
+            },
+            { 
+              id: 17, 
+              text: "Set Operations: INTERSECT and EXCEPT", 
+              tag: "intermediate",
+              ytURL:"https://youtu.be/U0lUPzNfqaA"
+            },
+          ],
+        },
+        {
+          id: 4,
+          title: "Chapter 4: Transforming and Enriching Data",
+          desc: "CASE, functions, transform, text",
+          icon: "transform",
+          topics: [
+            {
+              id: 18,
+              text: "Using CASE Expressions for Conditional Logic",
+              tag: "beginner",
+              ytURL:"https://youtu.be/YsWom04CbxE"
+            },
+            {
+              id: 19,
+              text: "Working with Numeric Functions in SQL",
+              tag: "intermediate",
+              codeURL: "19-Working-with-Numeric-Functions-in-SQL.sql",
+              ytURL:"https://youtu.be/GP2tD4acqpc"
+            },
+            {
+              id: 20,
+              text: "Handling Dates with SQL Date Functions",
+              tag: "intermediate",
+              codeURL: "20-Handling-Dates-with-SQL-Date-Functions.sql",
+              ytURL:"https://youtu.be/qaN3MiWiuJM"
+            },
+            {
+              id: 21,
+              text: "Manipulating Text with SQL String Functions",
+              tag: "intermediate",
+              codeURL: "21-Manipulating-Text-with-SQL-String-Functions.sql",
+              ytURL:"https://youtu.be/5XbBHIArBqk"
+            },
+            {
+              id: 22,
+              text: "Using Conversion Functions to Transform Data",
+              tag: "intermediate",
+              codeURL: "22-Using-Conversion-Functions-to-Transform-Data.sql",
+              ytURL:"https://youtu.be/qCqmQ0plHnQ"
+            },
+          ],
+        },
+        {
+          id: 5,
+          title: "Chapter 5: Advanced Querying and Analytics",
+          desc: "Groupping Sets, Rollup, Cube, Window functions, Pivoting",
+          icon: "analytics",
+          topics: [
+            {
+              id: 23,
+              text: "Multi‑Level Aggregations",
+              tag: "advanced",
+              ytURL:"https://youtu.be/-gbEuXffO6U"
+            },
+            {
+              id: 24,
+              text: "Introduction to SQL Window Functions",
+              tag: "advanced",
+              pdfURL: "24-Introduction-to-SQL-Window-Functions.pdf"
+            },
+            {
+              id: 25,
+              text: "Using Aggregate Functions in SQL Windows",
+              tag: "advanced"
+            },
+            {
+              id: 26,
+              text: "Ranking Functions for Ordered Data",
+              tag: "advanced"
+            },
+            {
+              id: 27,
+              text: "Performing Advanced Analysis with Analytic Functions",
+              tag: "advanced"
+            },
+            {
+              id: 28,
+              text: "Pivoting and Unpivoting Data in SQL",
+              tag: "advanced"
+            },
+          ],
+        },
+        {
+          id: 6,
+          title: "Chapter 6: DML - Changing Data",
+          desc: "INSERT, UPDATE, DELETE, MERGE",
+          icon: "dml",
+          topics: [
+            { 
+              id: 29, 
+              text: "Inserting Data with INSERT", 
+              tag: "beginner"
+            },
+            {
+              id: 30,
+              text: "Loading Large Datasets with BULK INSERT",
+              tag: "intermediate"
+            },
+            {
+              id: 31,
+              text: "Updating Data with the UPDATE Statement",
+              tag: "beginner"
+            },
+            {
+              id: 32,
+              text: "Deleting Data Safely with DELETE",
+              tag: "beginner"
+            },
+            {
+              id: 33,
+              text: "Synchronizing Data with MERGE",
+              tag: "intermediate"
+            },
+            {
+              id: 34,
+              text: "Capturing Changes with the OUTPUT Clause",
+              tag: "intermediate"
+            },
+            {
+              id: 35,
+              text: "Working with Bitwise Operators in SQL",
+              tag: "advanced"
+            },
+          ],
+        },
+        {
+          id: 7,
+          title: "Chapter 7: SQL Programming & Advanced Structures",
+          desc: "variables, control flow, dynamic SQL",
+          icon: "program",
+          topics: [
+            {
+              id: 36,
+              text: "Using Variables and Control Flow in SQL",
+              tag: "intermediate"
+            },
+            {
+              id: 37,
+              text: "Error Handling with TRY...CATCH in SQL",
+              tag: "intermediate"
+            },
+            {
+              id: 38,
+              text: "Storing Data with Table Variables, Temporary Tables, and SELECT INTO",
+              tag: "intermediate"
+            },
+            {
+              id: 39,
+              text: "Building Dynamic SQL for Flexible Queries",
+              tag: "advanced"
+            },
+            {
+              id: 40,
+              text: "Iterating Through Data with Cursors",
+              tag: "advanced"
+            },
+          ],
+        },
+        {
+          id: 8,
+          title: "Chapter 8: Programmatic SQL Objects",
+          desc: "views, functions, procs, triggers",
+          icon: "objects",
+          topics: [
+            {
+              id: 41,
+              text: "Creating and Managing Views in SQL",
+              tag: "intermediate"
+            },
+            {
+              id: 42,
+              text: "Building and Using SQL Functions",
+              tag: "advanced"
+            },
+            {
+              id: 43,
+              text: "Writing and Managing Stored Procedures",
+              tag: "intermediate"
+            },
+            {
+              id: 44,
+              text: "Understanding and Using Triggers in SQL",
+              tag: "advanced"
+            },
+          ],
+        },
+        {
+          id: 9,
+          title: "Chapter 9: Transactions, Security & Maintenance",
+          desc: "ACID, locking, users, injection",
+          icon: "shield",
+          topics: [
+            {
+              id: 45,
+              text: "Understanding SQL Transactions and ACID Properties (TCL)",
+              tag: "intermediate",
+              pdfURL: "45-TCL-Understanding-SQL-Transactions-and-ACID-Properties.pdf"
+            },
+            {
+              id: 46,
+              text: "Locking, Blocking, and Deadlocks Explained",
+              tag: "advanced"
+            },
+            {
+              id: 47,
+              text: "Managing Users, Roles, and Permissions in SQL Server",
+              tag: "advanced"
+            },
+            {
+              id: 48,
+              text: "Understanding SQL Injection and How to Prevent It",
+              tag: "intermediate"
+            },
+            {
+              id: 49,
+              text: "Implementing Data Encryption and Privacy in SQL Server",
+              tag: "advanced"
+            },
+            {
+              id: 50,
+              text: "Creating and Restoring SQL Server Backups",
+              tag: "intermediate"
+            },
+          ],
+        },
+        {
+          id: 10,
+          title: "Chapter 10: Integration, Reporting & Automation",
+          desc: "XML/JSON, SSRS, SSIS, automation",
+          icon: "gear",
+          topics: [
+            {
+              id: 51,
+              text: "Working with XML and JSON in SQL Server",
+              tag: "intermediate"
+            },
+            {
+              id: 52,
+              text: "Using SQLCMD for Scripting and Automation",
+              tag: "intermediate"
+            },
+            {
+              id: 53,
+              text: "Introduction to Data Warehousing Concepts",
+              tag: "advanced",
+              pdfURL: "53-Introduction-to-Data-Warehousing-Concepts.pdf"
+            },
+            {
+              id: 54,
+              text: "Connecting SQL Databases to External Tools",
+              tag: "intermediate"
+            },
+            {
+              id: 55,
+              text: "Building Reports with SQL Server Reporting Services (SSRS)",
+              tag: "intermediate"
+            },
+            {
+              id: 56,
+              text: "Data Integration and ETL with SQL Server Integration Services (SSIS)",
+              tag: "advanced"
+            },
+          ],
+        },
+        {
+          id: 11,
+          title: "Chapter 11: Performance and Optimization",
+          desc: "indexes, plans, DMVs",
+          icon: "rocket",
+          topics: [
+            {
+              id: 57,
+              text: "Indexes and Query Optimization Strategies",
+              tag: "advanced"
+            },
+            {
+              id: 58,
+              text: "Understanding Execution Plans (Visualizing Query Behavior)",
+              tag: "advanced"
+            },
+            {
+              id: 59,
+              text: "Exploring SQL Server Dynamic Management Views (DMVs)",
+              tag: "advanced"
+            },
+          ],
+        },
+        {
+          id: 12,
+          title: "Chapter 12: Bonus Topics",
+          desc: "temporal, mail, commands",
+          icon: "gift",
+          topics: [
+            {
+              id: 60,
+              text: "Temporal Tables for Tracking Historical Data",
+              tag: "advanced"
+            },
+            {
+              id: 61,
+              text: "Automating Emails in SQL Server with Database Mail",
+              tag: "intermediate"
+            },
+            {
+              id: 62,
+              text: "Common SQL Server Commands and Functions",
+              tag: "beginner"
+            },
+          ],
+        },
+      ];
+
+      // Map tag types to their styling properties
+      const TAG_STYLE = {
+        beginner: { glow: "glow-green", color: "--neon-green" },
+        intermediate: { glow: "glow-blue", color: "--neon-blue" },
+        advanced: { glow: "glow-pink", color: "--neon-pink" },
+      };
+
+      // Get the roadmap container element
+      const roadmapEl = document.getElementById("roadmap");
+
+      /**
+       * Creates SVG icons for different chapter types
+       * @param {string} name - The icon name
+       * @param {string} color - The color for the icon
+       * @returns {string} - SVG markup for the icon
+       */
+      function createIconSVG(name, color) {
+        const stroke = color;
+        switch (name) {
+          case "db":
+            return `<svg viewBox="0 0 64 64" width="34" height="34" xmlns="http://www.w3.org/2000/svg"><ellipse cx="32" cy="14" rx="20" ry="8" fill="none" stroke="${stroke}" stroke-width="2.6"/><path d="M12 14v12c0 4.4 8.9 8 20 8s20-3.6 20-8V14" fill="none" stroke="${stroke}" stroke-width="2.6"/><path d="M12 26v12c0 4.4 8.9 8 20 8s20-3.6 20-8V26" fill="none" stroke="${stroke}" stroke-width="2.6"/></svg>`;
+          case "query":
+            return `<svg viewBox="0 0 64 64" width="34" height="34" xmlns="http://www.w3.org/2000/svg"><rect x="6" y="10" width="36" height="28" rx="3" fill="none" stroke="${stroke}" stroke-width="2.4"/><path d="M48 44 L58 54" stroke="${stroke}" stroke-width="3" stroke-linecap="round"/><circle cx="52" cy="48" r="6" fill="none" stroke="${stroke}" stroke-width="2.4"/></svg>`;
+          case "join":
+            return `<svg viewBox="0 0 64 64" width="34" height="34" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="20" r="8" fill="none" stroke="${stroke}" stroke-width="2.6"/><circle cx="46" cy="20" r="8" fill="none" stroke="${stroke}" stroke-width="2.6"/><path d="M26 28 L38 28" stroke="${stroke}" stroke-width="2.6" stroke-linecap="round"/><rect x="18" y="36" width="28" height="12" rx="2" fill="none" stroke="${stroke}" stroke-width="2.2"/></svg>`;
+          case "transform":
+            return `<svg viewBox="0 0 64 64" width="34" height="34" xmlns="http://www.w3.org/2000/svg"><path d="M10 22 L28 22 L24 18" fill="none" stroke="${stroke}" stroke-width="2.6" stroke-linecap="round"/><path d="M54 42 L36 42 L40 46" fill="none" stroke="${stroke}" stroke-width="2.6" stroke-linecap="round"/><path d="M34 24 L30 40" stroke="${stroke}" stroke-width="2.6" stroke-linecap="round"/></svg>`;
+          case "analytics":
+            return `<svg viewBox="0 0 64 64" width="34" height="34" xmlns="http://www.w3.org/2000/svg"><rect x="10" y="20" width="6" height="26" rx="1" fill="none" stroke="${stroke}" stroke-width="2.4"/><rect x="22" y="14" width="6" height="32" rx="1" fill="none" stroke="${stroke}" stroke-width="2.4"/><rect x="34" y="8" width="6" height="38" rx="1" fill="none" stroke="${stroke}" stroke-width="2.4"/></svg>`;
+          case "dml":
+            return `<svg viewBox="0 0 64 64" width="34" height="34" xmlns="http://www.w3.org/2000/svg"><rect x="10" y="12" width="36" height="40" rx="3" fill="none" stroke="${stroke}" stroke-width="2.4"/><path d="M20 24h24" stroke="${stroke}" stroke-width="2.4"/><path d="M20 34h16" stroke="${stroke}" stroke-width="2.4"/></svg>`;
+          case "program":
+            return `<svg viewBox="0 0 64 64" width="34" height="34" xmlns="http://www.w3.org/2000/svg"><polyline points="18,18 30,32 18,46" fill="none" stroke="${stroke}" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><polyline points="46,18 34,32 46,46" fill="none" stroke="${stroke}" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+          case "objects":
+            return `<svg viewBox="0 0 64 64" width="34" height="34" xmlns="http://www.w3.org/2000/svg"><rect x="10" y="14" width="18" height="14" rx="2" fill="none" stroke="${stroke}" stroke-width="2.2"/><rect x="36" y="14" width="18" height="14" rx="2" fill="none" stroke="${stroke}" stroke-width="2.2"/><rect x="10" y="36" width="44" height="12" rx="2" fill="none" stroke="${stroke}" stroke-width="2.2"/></svg>`;
+          case "shield":
+            return `<svg viewBox="0 0 64 64" width="34" height="34" xmlns="http://www.w3.org/2000/svg"><path d="M32 8 L16 14 v12c0 18 16 22 16 22s16-4 16-22V14z" fill="none" stroke="${stroke}" stroke-width="2.6"/><path d="M24 28 L32 36 L40 28" stroke="${stroke}" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+          case "gear":
+            return `<svg viewBox="0 0 64 64" width="34" height="34" xmlns="http://www.w3.org/2000/svg"><circle cx="32" cy="32" r="8" fill="none" stroke="${stroke}" stroke-width="2.6"/><path d="M32 8v8 M32 48v8 M8 32h8 M48 32h8" stroke="${stroke}" stroke-width="2.2" stroke-linecap="round"/></svg>`;
+          case "rocket":
+            return `<svg viewBox="0 0 64 64" width="34" height="34" xmlns="http://www.w3.org/2000/svg"><path d="M16 44c0-8 8-20 16-20s16 12 16 20c0 6-10 10-16 12-6-2-16-6-16-12z" fill="none" stroke="${stroke}" stroke-width="2.6"/><path d="M32 12 L36 8" stroke="${stroke}" stroke-width="2.6" stroke-linecap="round"/></svg>`;
+          case "gift":
+            return `<svg viewBox="0 0 64 64" width="34" height="34" xmlns="http://www.w3.org/2000/svg"><rect x="10" y="22" width="44" height="26" rx="2" fill="none" stroke="${stroke}" stroke-width="2.4"/><path d="M20 22v-6c0-3 4-6 12-6s12 3 12 6v6" stroke="${stroke}" stroke-width="2.4" fill="none"/><path d="M32 22v26" stroke="${stroke}" stroke-width="2.4"/></svg>`;
+          default:
+            return "";
+        }
+      }
+
+      /**
+       * Creates resource icons for YouTube, PDF, and Code links
+       * @param {Object} topic - The topic object containing resource URLs
+       * @returns {string} - HTML markup for resource icons
+       */
+      function createResourceIcons(topic) {
+        if (!topic.ytURL && !topic.pdfURL && !topic.codeURL) return '';
+        
+        let iconsHTML = '<div class="resource-icons">';
+        
+        if (topic.ytURL) {
+          iconsHTML += `
+            <a href="${topic.ytURL}" target="_blank" class="resource-icon yt-icon" title="Watch YouTube Video">
+              <svg viewBox="0 0 24 24">
+                <path d="M10,15L15.19,12L10,9V15M21.56,7.17C21.69,7.64 21.78,8.27 21.84,9.07C21.91,9.87 21.94,10.56 21.94,11.16L22,12C22,14.19 21.84,15.8 21.56,16.83C21.31,17.73 20.73,18.31 19.83,18.56C19.36,18.69 18.5,18.78 17.18,18.84C15.88,18.91 14.69,18.94 13.59,18.94L12,19C7.81,19 5.2,18.84 4.17,18.56C3.27,18.31 2.69,17.73 2.44,16.83C2.31,16.36 2.22,15.73 2.16,14.93C2.09,14.13 2.06,13.44 2.06,12.84L2,12C2,9.81 2.16,8.2 2.44,7.17C2.69,6.27 3.27,5.69 4.17,5.44C4.64,5.31 5.5,5.22 6.82,5.16C8.12,5.09 9.31,5.06 10.41,5.06L12,5C16.19,5 18.8,5.16 19.83,5.44C20.73,5.69 21.31,6.27 21.56,7.17Z" />
+              </svg>
+            </a>
+          `;
+        }
+        
+        if (topic.pdfURL) {
+          iconsHTML += `
+            <a href="PDF/${topic.pdfURL}" target="_blank" class="resource-icon pdf-icon" title="Open PDF">
+              <svg viewBox="0 0 24 24">
+                <path d="M14,2L20,8V20A2,2 0 0,1 18,22H6A2,2 0 0,1 4,20V4A2,2 0 0,1 6,2H14M18,20V9H13V4H6V20H18M12.4,11.5C13.5,11.5 14.4,12.3 14.4,13.4C14.4,14.5 13.5,15.3 12.4,15.3C11.3,15.3 10.4,14.5 10.4,13.4C10.4,12.3 11.3,11.5 12.4,11.5M7.4,19.5C7.4,17.8 9.7,16.5 12.4,16.5C15.1,16.5 17.4,17.8 17.4,19.5V20.5H7.4V19.5Z" />
+              </svg>
+            </a>
+          `;
+        }
+        
+        if (topic.codeURL) {
+          iconsHTML += `
+            <a href="Code/${topic.codeURL}" target="_blank" class="resource-icon code-icon" title="View Code Examples">
+              <svg viewBox="0 0 24 24">
+                <path d="M14.6,16.6L19.2,12L14.6,7.4L16,6L22,12L16,18L14.6,16.6M9.4,16.6L4.8,12L9.4,7.4L8,6L2,12L8,18L9.4,16.6Z" />
+              </svg>
+            </a>
+          `;
+        }
+        
+        iconsHTML += '</div>';
+        return iconsHTML;
+      }
+
+      /**
+       * Renders the entire roadmap with all chapters and topics
+       */
+      function render() {
+        roadmapEl.innerHTML = "";
+
+        // Create a section for each chapter
+        CHAPTERS.forEach((ch) => {
+          const chap = document.createElement("section");
+          chap.className = "chapter";
+
+          // Get a color for this chapter based on its ID
+          const colors = [
+            getComputedStyle(document.documentElement)
+              .getPropertyValue("--neon-blue")
+              .trim(),
+            getComputedStyle(document.documentElement)
+              .getPropertyValue("--neon-pink")
+              .trim(),
+            getComputedStyle(document.documentElement)
+              .getPropertyValue("--neon-green")
+              .trim(),
+            getComputedStyle(document.documentElement)
+              .getPropertyValue("--neon-yellow")
+              .trim(),
+            getComputedStyle(document.documentElement)
+              .getPropertyValue("--neon-purple")
+              .trim(),
+            getComputedStyle(document.documentElement)
+              .getPropertyValue("--neon-orange")
+              .trim(),
+          ];
+          const color = colors[(ch.id - 1) % colors.length];
+
+          // Create the chapter header
+          const header = document.createElement("div");
+          header.className = "chapter-header";
+
+          // Create the icon
+          const iconWrap = document.createElement("div");
+          iconWrap.className = "icon";
+          iconWrap.style.boxShadow = `0 0 18px ${color}, 0 0 56px ${color}44, inset 0 0 10px rgba(0,0,0,0.6)`;
+          iconWrap.innerHTML = createIconSVG(ch.icon, color);
+
+          // Create the title and description
+          const titleWrap = document.createElement("div");
+          titleWrap.style.display = "flex";
+          titleWrap.style.flexDirection = "column";
+          titleWrap.style.minWidth = "0";
+
+          const t = document.createElement("div");
+          t.className = "chapter-title";
+          t.textContent = ch.title;
+
+          const d = document.createElement("div");
+          d.className = "chapter-desc";
+          d.textContent = ch.desc;
+
+          titleWrap.appendChild(t);
+          titleWrap.appendChild(d);
+
+          // Create the chevron icon
+          const chev = document.createElement("div");
+          chev.className = "chev";
+          chev.innerHTML = "&#9656;";
+
+          // Assemble the header
+          header.appendChild(iconWrap);
+          header.appendChild(titleWrap);
+          header.appendChild(chev);
+
+          // Create the chapter body with all topics
+          const body = document.createElement("div");
+          body.className = "chapter-body";
+
+          ch.topics.forEach((tp) => {
+            const topic = document.createElement("div");
+            topic.className = "topic";
+            topic.setAttribute("data-tag", tp.tag);
+
+            const left = document.createElement("div");
+            left.className = "left";
+
+            const bullet = document.createElement("div");
+            bullet.style.width = "10px";
+            bullet.style.height = "10px";
+            bullet.style.borderRadius = "2px";
+            bullet.style.background = color;
+            bullet.style.boxShadow = `0 0 12px ${color}`;
+
+            const txt = document.createElement("div");
+            txt.className = "text";
+            
+            const textSpan = document.createElement("span");
+            textSpan.className = "text-content";
+            textSpan.textContent = `${tp.id}. ${tp.text}`;
+            txt.appendChild(textSpan);
+            
+            // Add resource icons if they exist
+            const resourceIcons = createResourceIcons(tp);
+            if (resourceIcons) {
+              txt.insertAdjacentHTML('beforeend', resourceIcons);
+            }
+
+            left.appendChild(bullet);
+            left.appendChild(txt);
+
+            const tag = document.createElement("div");
+            tag.className = "tag " + tp.tag;
+            tag.textContent = tp.tag.charAt(0).toUpperCase() + tp.tag.slice(1);
+
+            topic.appendChild(left);
+            topic.appendChild(tag);
+            body.appendChild(topic);
+          });
+
+          // Add click handler to toggle chapter visibility
+          header.addEventListener("click", () => {
+            const visible = body.style.display === "block";
+            body.style.display = visible ? "none" : "block";
+            chev.innerHTML = visible ? "&#9656;" : "&#9662;";
+          });
+
+          // Add everything to the chapter
+          chap.appendChild(header);
+          chap.appendChild(body);
+          roadmapEl.appendChild(chap);
+        });
+      }
+
+      // Initialize the roadmap
+      render();
+
+      // Set up the "Collapse All" button functionality
+      const toggleAllBtn = document.getElementById("toggleAll");
+      toggleAllBtn.addEventListener("click", () => {
+        const bodies = document.querySelectorAll(".chapter-body");
+        const anyClosed = Array.from(bodies).some(
+          (b) => b.style.display !== "block"
+        );
+
+        bodies.forEach((b) => (b.style.display = anyClosed ? "block" : "none"));
+        document
+          .querySelectorAll(".chev")
+          .forEach((c) => (c.innerHTML = anyClosed ? "&#9662;" : "&#9656;"));
+
+        toggleAllBtn.textContent = anyClosed ? "Collapse All" : "Expand All";
+      });
+
+      // Set up level selection
+      const lvlButtons = document.getElementById("levelButtons");
+      lvlButtons.addEventListener("click", (ev) => {
+        const label = ev.target.closest("label");
+        if (!label) return;
+
+        Array.from(lvlButtons.querySelectorAll("label")).forEach((l) =>
+          l.classList.remove("active")
+        );
+        label.classList.add("active");
+
+        const val = label.getAttribute("data-val");
+        const input = label.querySelector('input[type="radio"]');
+        if (input) input.checked = true;
+
+        applyLevel(val);
+      });
+
+      // Set up the "Essentials Only" checkbox
+      const showOnlyCheckbox = document.getElementById("showOnly");
+      showOnlyCheckbox.addEventListener("change", () => {
+        applyLevel(
+          document.querySelector("#levelButtons input:checked")?.value ||
+            "beginner"
+        );
+      });
+
+      /**
+       * Applies the selected level filter to all topics
+       * @param {string} level - The selected level (zero, beginner, intermediate, advanced)
+       */
+      function applyLevel(level) {
+        const chapters = document.querySelectorAll(".chapter");
+
+        chapters.forEach((ch) => {
+          const topics = ch.querySelectorAll(".topic");
+          let anyVisible = false;
+
+          topics.forEach((t) => {
+            t.classList.remove("dim", "glow-blue", "glow-pink", "glow-green");
+            const tag = t.getAttribute("data-tag");
+
+            // Apply different styling based on selected level
+            if (level === "zero") {
+              if (tag === "beginner") t.classList.add("glow-green");
+              if (tag === "intermediate") t.classList.add("glow-blue");
+              if (tag === "advanced") t.classList.add("glow-pink");
+              t.style.display = "";
+            } else if (level === "beginner") {
+              if (tag === "beginner") t.classList.add("glow-green");
+              else t.classList.add("dim");
+            } else if (level === "intermediate") {
+              if (tag === "beginner") t.classList.add("dim");
+              if (tag === "intermediate") t.classList.add("glow-blue");
+              if (tag === "advanced") t.classList.add("dim");
+            } else if (level === "advanced") {
+              if (tag === "advanced") t.classList.add("glow-pink");
+              if (tag === "intermediate") t.classList.add("dim");
+              if (tag === "beginner") t.classList.add("dim");
+            }
+
+            // Hide dimmed topics if "Essentials Only" is checked
+            if (showOnlyCheckbox.checked && t.classList.contains("dim")) {
+              t.style.display = "none";
+            } else {
+              t.style.display = "";
+            }
+
+            if (t.style.display !== "none") anyVisible = true;
+          });
+
+          // Hide entire chapter if no topic is visible
+          ch.style.display = anyVisible ? "" : "none";
+        });
+      }
+
+      // Set up radio button change listeners
+      document
+        .querySelectorAll('#levelButtons input[type="radio"]')
+        .forEach((r) => {
+          r.addEventListener("change", (e) => {
+            applyLevel(e.target.value);
+          });
+        });
+
+      // Initialize the page state
+      document.addEventListener("DOMContentLoaded", () => {
+        document.querySelector('input[value="zero"]').checked = true;
+
+        Array.from(document.querySelectorAll("#levelButtons label")).forEach(
+          (l) => l.classList.remove("active")
+        );
+        document
+          .querySelector('#levelButtons label[data-val="zero"]')
+          .classList.add("active");
+
+        document
+          .querySelectorAll(".chapter-body")
+          .forEach((b) => (b.style.display = "none"));
+        document
+          .querySelectorAll(".chev")
+          .forEach((c) => (c.innerHTML = "&#9656;"));
+
+        applyLevel("zero");
+      });
+    </script>
+  </body>
+</html>
