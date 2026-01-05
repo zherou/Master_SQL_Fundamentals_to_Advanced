@@ -28,14 +28,10 @@ DECLARE emailList        CURSOR
 
 OPEN emailList;
 
---FETCH NEXT FROM emailList INTO @name, @email;
+FETCH NEXT FROM emailList INTO @name, @email;
 
-
-WHILE @@FETCH_STATUS = 0 or @runOnce= 1
+WHILE @@FETCH_STATUS = 0
 BEGIN
-SET @runOnce = 0
-   FETCH NEXT FROM emailList INTO @name, @email;
-
    PRINT CONCAT(@name, ' - ', @email);
     /*
     SET @name = CONCAT('Hello ', @name,
@@ -49,6 +45,7 @@ SET @runOnce = 0
                  @body         = @name;
      
      */
+   FETCH NEXT FROM emailList INTO @name, @email;
 
 END;
 
